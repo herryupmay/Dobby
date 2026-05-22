@@ -1,0 +1,45 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: rounded square in brand blue -->
+  <rect width="128" height="128" rx="24" fill="#2563eb"/>
+
+  <!-- Sock body (white): cuff + leg + curved toe extending lower-right -->
+  <path d="M 32 26
+           Q 32 22 36 22
+           L 90 22
+           Q 94 22 94 26
+           L 94 40
+           Q 94 44 90 44
+           L 84 44
+           L 84 78
+           Q 84 86 90 92
+           L 100 100
+           Q 108 106 104 112
+           Q 100 118 92 114
+           L 50 100
+           Q 38 96 38 84
+           L 38 44
+           L 36 44
+           Q 32 44 32 40
+           Z"
+        fill="#ffffff"/>
+
+  <!-- Subtle cuff stripe to suggest a knitted band -->
+  <rect x="36" y="36" width="54" height="3" rx="1.5" fill="#2563eb" opacity="0.18"/>
+
+  <!-- Sparkle: 4-point star, top-right of canvas -->
+  <g transform="translate(102 28)" fill="#fde047">
+    <path d="M 0 -11
+             C 1.5 -2  2 -1.5  11 0
+             C 2 1.5  1.5 2  0 11
+             C -1.5 2  -2 1.5  -11 0
+             C -2 -1.5  -1.5 -2  0 -11 Z"/>
+  </g>
+  <!-- Tiny secondary sparkle for sparkle-vibe -->
+  <g transform="translate(112 48)" fill="#fde047">
+    <path d="M 0 -5
+             C 0.7 -1  1 -0.7  5 0
+             C 1 0.7  0.7 1  0 5
+             C -0.7 1  -1 0.7  -5 0
+             C -1 -0.7  -0.7 -1  0 -5 Z"/>
+  </g>
+</svg>

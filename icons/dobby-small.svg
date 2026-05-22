@@ -1,0 +1,18 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+  <!-- Background: rounded square -->
+  <rect width="16" height="16" rx="3" fill="#2563eb"/>
+  <!-- Bold sock silhouette, sized to dominate the canvas -->
+  <path d="M 4 3
+           L 11 3
+           L 11 5
+           L 10 5
+           L 10 9
+           L 13 11
+           L 13 13
+           L 5 11
+           L 5 5
+           L 4 5 Z"
+        fill="#ffffff"/>
+  <!-- Single bright sparkle pixel -->
+  <rect x="12" y="3" width="2" height="2" fill="#fde047"/>
+</svg>

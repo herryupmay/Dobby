@@ -1,0 +1,21 @@
+# Build artifacts (regenerated for each release)
+*.zip
+
+# Stray / temp archives
+ziSSHVf1
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local env / secrets (none today, but a guard for later)
+.env
+.env.local
