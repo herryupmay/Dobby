@@ -76,7 +76,7 @@ Dobby never sends your messages anywhere. The only storage it touches is `localS
 
 ## License
 
-TBD — add a `LICENSE` file before publishing.
+NONE. Do what you like.
 
 ## Acknowledgements
 
