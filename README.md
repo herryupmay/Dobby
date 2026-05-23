@@ -76,7 +76,7 @@ Dobby never sends your messages anywhere. The only storage it touches is `localS
 
 ## License
 
-NONE. Do what you like.
+CC0 1.0 Universal
 
 ## Acknowledgements
 
