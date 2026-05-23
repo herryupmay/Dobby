@@ -1,8 +1,8 @@
 # Build artifacts (regenerated for each release)
 *.zip
 
-# Stray / temp archives
-ziSSHVf1
+# Chrome Web Store listing assets (kept out of source tree)
+icons/Screenshot*
 
 # OS junk
 .DS_Store
