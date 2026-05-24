@@ -32,6 +32,7 @@
           <option value="en">EN</option>
           <option value="zh-Hant">繁中</option>
         </select>
+        <button id="settings" title="Settings" aria-expanded="false" aria-controls="settings-panel">⚙</button>
         <button id="new-chat" title="Start fresh">↻</button>
       </div>
     </div>
@@ -42,6 +43,20 @@
     <div id="usage-text" class="usage-text"></div>
     <div id="warning" class="warning hidden"></div>
   </header>
+
+  <section id="settings-panel" class="settings-panel hidden" aria-label="Settings">
+    <h2 id="settings-header" class="settings-header">Custom system prompt</h2>
+    <p id="settings-hint" class="settings-hint">Override Dobby's default personality. Saving starts a fresh chat.</p>
+    <textarea id="settings-textarea" rows="8" placeholder="Tell Dobby how to behave..."></textarea>
+    <div class="settings-meta">
+      <span id="settings-charcount" class="settings-charcount"></span>
+      <span id="settings-longwarn" class="settings-longwarn hidden"></span>
+    </div>
+    <div class="settings-actions">
+      <button id="settings-reset" type="button" class="settings-btn-secondary">Reset to default</button>
+      <button id="settings-save" type="button" class="settings-btn-primary">Save</button>
+    </div>
+  </section>
 
   <main id="messages" class="messages">
     <div id="empty-state" class="empty-state">

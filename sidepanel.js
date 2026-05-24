@@ -1,6 +1,6 @@
 // === System prompts ===
 const SYSTEM_PROMPTS = {
-  "zh-Hant": "你是多比，一位友善又熱心的小助手，住在使用者自己的電腦上。\n\n【語言鐵律 — 必須遵守】\n1. 全程只使用「繁體中文（台灣正體）」，絕對禁止輸出任何簡體字。\n2. 若不確定某個字的繁體寫法，寧可換句話說，也不要使用簡體字。\n3. 常見對照（左為簡體、右為正確的繁體）：这→這、那→那、会→會、学→學、时→時、说→說、对→對、个→個、为→為、问→問、买→買、卖→賣、来→來、国→國、还→還、与→與、电→電、脑→腦、机→機、东→東、写→寫、画→畫、读→讀、听→聽、见→見、长→長、门→門、间→間、从→從、关→關、开→開、发→發、过→過、应→應、该→該、让→讓、这样→這樣、什么→什麼、怎么→怎麼。\n4. 詞彙用台灣慣用語：軟體（不是軟件）、硬體（不是硬件）、滑鼠（不是鼠標）、螢幕（不是屏幕）、影片（不是視頻）、網路（不是網絡）、檔案（不是文件，文件指的是公文書）、程式（不是程序）、解析度（不是分辨率）。\n5. 標點使用全形：「」、，、。、？、！。\n\n語氣親切、簡潔、像個熱心的小幫手。",
+  "zh-Hant": "你是多比，一位友善又熱心的小助手，住在使用者自己的電腦上。\n\n【語言鐵律 — 必須遵守】\n1. 全程主要使用「繁體中文（台灣正體）」，絕對禁止輸出簡體字。但以下情況可以直接使用原文：使用者明確詢問某個外文字的拼寫、定義或用法；專有名詞（人名、品牌、產品）；技術或學術術語沒有通用中文翻譯時。\n2. 若不確定某個字的繁體寫法，寧可換句話說，也不要使用簡體字。\n3. 常見對照（左為簡體、右為正確的繁體）：这→這、那→那、会→會、学→學、时→時、说→說、对→對、个→個、为→為、问→問、买→買、卖→賣、来→來、国→國、还→還、与→與、电→電、脑→腦、机→機、东→東、写→寫、画→畫、读→讀、听→聽、见→見、长→長、门→門、间→間、从→從、关→關、开→開、发→發、过→過、应→應、该→該、让→讓、这样→這樣、什么→什麼、怎么→怎麼。\n4. 詞彙用台灣慣用語：軟體（不是軟件）、硬體（不是硬件）、滑鼠（不是鼠標）、螢幕（不是屏幕）、影片（不是視頻）、網路（不是網絡）、檔案（不是文件，文件指的是公文書）、程式（不是程序）、解析度（不是分辨率）。\n5. 標點使用全形：「」、，、。、？、！。\n\n語氣親切、簡潔、像個熱心的小幫手。",
   "en": "You are Dobby, a friendly and eager little helper running locally on the user's own computer. Keep replies warm but concise."
 };
 
@@ -32,7 +32,17 @@ const I18N = {
     hwReason: "Reason:",
     hwSeeDetails: "See details at chrome://on-device-internals",
     hwUnavailable: "Dobby cannot run on this device.",
-    langSwitchToast: "Switching language starts a fresh chat."
+    langSwitchToast: "Switching language starts a fresh chat.",
+    settingsTitle: "Settings",
+    settingsHeader: "Custom system prompt",
+    settingsHint: "Override Dobby's default personality. Saving starts a fresh chat.",
+    settingsPlaceholder: "Tell Dobby how to behave...",
+    settingsSave: "Save",
+    settingsReset: "Reset to default",
+    settingsCharCount: "{count} characters",
+    settingsLongWarn: "Long prompts eat into Dobby's memory.",
+    promptSaved: "Custom prompt saved. Starting fresh chat.",
+    promptReset: "Reset to default. Starting fresh chat."
   },
   "zh-Hant": {
     appName: "多比",
@@ -60,7 +70,17 @@ const I18N = {
     hwReason: "原因：",
     hwSeeDetails: "詳細資訊請查看 chrome://on-device-internals",
     hwUnavailable: "多比無法在這台裝置上住下來。",
-    langSwitchToast: "切換語言會清空目前的對話。"
+    langSwitchToast: "切換語言會清空目前的對話。",
+    settingsTitle: "設定",
+    settingsHeader: "自訂系統提示",
+    settingsHint: "覆寫多比的預設個性。儲存後會開始新對話。",
+    settingsPlaceholder: "告訴多比該怎麼做⋯",
+    settingsSave: "儲存",
+    settingsReset: "還原預設",
+    settingsCharCount: "{count} 字",
+    settingsLongWarn: "提示過長會占用多比的記憶體。",
+    promptSaved: "已儲存自訂提示，開始新對話。",
+    promptReset: "已還原預設，開始新對話。"
   }
 };
 
@@ -92,6 +112,18 @@ if (typeof marked !== "undefined") {
 
 // === State ===
 const STORAGE_KEY_LANG = "dobby.lang";
+const STORAGE_KEY_SYSPROMPT = "dobby.systemPrompt";
+const SYSPROMPT_SOFT_LIMIT = 1500; // chars; above this we warn the user
+
+// Returns the system prompt to use right now: the user's custom override if
+// they've set one, otherwise the built-in for the active language.
+function effectiveSystemPrompt(language) {
+  try {
+    const custom = localStorage.getItem(STORAGE_KEY_SYSPROMPT);
+    if (custom && custom.trim()) return custom;
+  } catch {}
+  return SYSTEM_PROMPTS[language] ?? SYSTEM_PROMPTS.en;
+}
 
 let session = null;
 // Default to English; if the user has previously chosen another language,
@@ -116,6 +148,15 @@ const usageTextEl = document.getElementById("usage-text");
 const warningEl = document.getElementById("warning");
 const newChatBtn = document.getElementById("new-chat");
 const languageEl = document.getElementById("language");
+const settingsBtn = document.getElementById("settings");
+const settingsPanelEl = document.getElementById("settings-panel");
+const settingsHeaderEl = document.getElementById("settings-header");
+const settingsHintEl = document.getElementById("settings-hint");
+const settingsTextareaEl = document.getElementById("settings-textarea");
+const settingsCharCountEl = document.getElementById("settings-charcount");
+const settingsLongWarnEl = document.getElementById("settings-longwarn");
+const settingsSaveBtn = document.getElementById("settings-save");
+const settingsResetBtn = document.getElementById("settings-reset");
 
 // === Static UI i18n sweep ===
 function applyI18nToStaticUI() {
@@ -124,6 +165,14 @@ function applyI18nToStaticUI() {
   sendBtn.textContent = t("sendBtn");
   newChatBtn.title = t("newChatTitle");
   languageEl.title = t("languageTitle");
+  settingsBtn.title = t("settingsTitle");
+  settingsHeaderEl.textContent = t("settingsHeader");
+  settingsHintEl.textContent = t("settingsHint");
+  settingsTextareaEl.placeholder = t("settingsPlaceholder");
+  settingsSaveBtn.textContent = t("settingsSave");
+  settingsResetBtn.textContent = t("settingsReset");
+  settingsLongWarnEl.textContent = t("settingsLongWarn");
+  updateSettingsCharCount();
 
   const emptyTitle = document.getElementById("empty-title");
   const emptyHint = document.getElementById("empty-hint");
@@ -192,7 +241,7 @@ async function createSession(language) {
     expectedInputs: [{ type: "text", languages: apiLangs }],
     expectedOutputs: [{ type: "text", languages: apiLangs }],
     initialPrompts: [
-      { role: "system", content: SYSTEM_PROMPTS[language] }
+      { role: "system", content: effectiveSystemPrompt(language) }
     ],
     monitor(m) {
       m.addEventListener("downloadprogress", (e) => {
@@ -401,6 +450,75 @@ newChatBtn.addEventListener("click", async () => {
   }
 });
 
+// === Settings panel (custom system prompt) ===
+function updateSettingsCharCount() {
+  if (!settingsTextareaEl || !settingsCharCountEl) return;
+  const n = settingsTextareaEl.value.length;
+  settingsCharCountEl.textContent = t("settingsCharCount", { count: n.toLocaleString() });
+  if (n > SYSPROMPT_SOFT_LIMIT) {
+    settingsLongWarnEl.classList.remove("hidden");
+  } else {
+    settingsLongWarnEl.classList.add("hidden");
+  }
+}
+
+function openSettings() {
+  // Prefill with the currently effective prompt so users edit instead of
+  // staring at a blank box. If they had a custom one saved, that shows;
+  // otherwise the built-in for the current language.
+  settingsTextareaEl.value = effectiveSystemPrompt(currentLanguage);
+  settingsPanelEl.classList.remove("hidden");
+  settingsBtn.setAttribute("aria-expanded", "true");
+  updateSettingsCharCount();
+  settingsTextareaEl.focus();
+}
+
+function closeSettings() {
+  settingsPanelEl.classList.add("hidden");
+  settingsBtn.setAttribute("aria-expanded", "false");
+}
+
+async function freshChatAfterPromptChange(toastKey) {
+  messagesEl.innerHTML = "";
+  warningShown = false;
+  hideWarning();
+  setStatus(t(toastKey));
+  try {
+    await createSession(currentLanguage);
+    setStatus(t("ready"), "ready");
+    showFreshState();
+  } catch (err) {
+    setStatus(t("resetFailed", { error: err.message }), "error");
+  }
+}
+
+settingsBtn.addEventListener("click", () => {
+  if (settingsPanelEl.classList.contains("hidden")) openSettings();
+  else closeSettings();
+});
+
+settingsTextareaEl.addEventListener("input", updateSettingsCharCount);
+
+settingsSaveBtn.addEventListener("click", async () => {
+  if (isGenerating) return;
+  const value = settingsTextareaEl.value.trim();
+  try {
+    if (value) localStorage.setItem(STORAGE_KEY_SYSPROMPT, value);
+    else localStorage.removeItem(STORAGE_KEY_SYSPROMPT);
+  } catch {}
+  closeSettings();
+  await freshChatAfterPromptChange("promptSaved");
+});
+
+settingsResetBtn.addEventListener("click", async () => {
+  if (isGenerating) return;
+  try { localStorage.removeItem(STORAGE_KEY_SYSPROMPT); } catch {}
+  settingsTextareaEl.value = SYSTEM_PROMPTS[currentLanguage] ?? SYSTEM_PROMPTS.en;
+  updateSettingsCharCount();
+  closeSettings();
+  await freshChatAfterPromptChange("promptReset");
+});
+
 languageEl.addEventListener("change", async e => {
   if (isGenerating) {
     languageEl.value = currentLanguage;
@@ -422,3 +540,4 @@ languageEl.addEventListener("change", async e => {
     setStatus(t("resetFailed", { error: err.message }), "error");
   }
 });
+

@@ -70,9 +70,15 @@ The `.gitignore` keeps a few things out of source control:
 - Editor folders (`.vscode/`, `.idea/`) and swap files
 - `.env` / `.env.local` (Dobby doesn't use these today, but it's a guard for later)
 
+## Customize
+
+Click the **⚙** button in the header to open the settings panel and write your own system prompt. Saving replaces Dobby's built-in personality with whatever you put in the box and starts a fresh chat. "Reset to default" clears the override and brings the built-in prompt back. The override is one global string — it wins for both English and 繁中 modes.
+
+Pre-filling the textarea shows you whatever prompt is *currently in effect*, so you can edit Dobby's defaults rather than starting from scratch.
+
 ## Privacy
 
-Dobby never sends your messages anywhere. The only storage it touches is `localStorage` (inside the extension's own sandbox) to remember your language choice. There is no telemetry.
+Dobby never sends your messages anywhere. The only storage it touches is `localStorage` (inside the extension's own sandbox), which holds your language choice and your custom system prompt (if you set one). There is no telemetry.
 
 ## License
 
